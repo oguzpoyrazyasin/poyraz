@@ -7,7 +7,9 @@ export default function TermsPage() {
       <h2>Hesap uygunluğu</h2>
       <p>Poyraz Kids hesabı yalnızca yetişkin ebeveyn veya yasal vasi tarafından açılabilir. Çocuklar bağımsız hesap sahibi değildir.</p>
       <h2>Ücretsiz deneme ve abonelik</h2>
-      <p>Yeni hesaplar, aksi belirtilmedikçe 3 günlük deneme süresine erişir. Deneme sonrası seçilen ücretli plan yürürlüğe girer. Kullanıcı aboneliğini hesap panelinden iptal edebilir.</p>
+      <p>Yeni hesaplar 3 günlük ücretsiz deneme süresine erişir. Deneme için kart zorunlu değildir. Kullanıcının açık ödeme yetkilendirmesi olmadan deneme sonunda otomatik tahsilat yapılmaz; ücretli erişim, abonelik ödemesi tamamlanana kadar duraklatılabilir.</p>
+      <h2>İptal</h2>
+      <p>Aktif abonelikler hesap paneli üzerinden iptal edilebilir. İptal koşulları ve varsa dönem sonuna kadar kullanım hakkı satın alma sırasında açıkça gösterilir.</p>
       <h2>İçerik niteliği</h2>
       <p>Poyraz Kids eğitim ve ebeveyn destek amaçlıdır; tıbbi, psikolojik veya gelişimsel teşhis hizmeti değildir. Gelişimsel endişelerde yetkin bir sağlık veya gelişim uzmanına başvurulmalıdır.</p>
       <h2>Üçüncü taraf içerikleri</h2>

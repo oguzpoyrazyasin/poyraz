@@ -1,6 +1,15 @@
 import Link from "next/link";
+import { signIn } from "@/app/auth/actions";
 
-export default function LoginPage() {
+export default async function LoginPage({
+  searchParams
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const params = await searchParams;
+  const verifyMessage = params.message === "verify-email";
+  const invalid = params.error === "invalid-credentials";
+
   return (
     <main className="authPage">
       <section className="authAside">
@@ -13,9 +22,11 @@ export default function LoginPage() {
         <small>Çocuk verisini minimumda tutuyoruz.</small>
       </section>
       <section className="authCardWrap">
-        <form className="authCard">
+        <form className="authCard" action={signIn}>
           <h2>Tekrar hoş geldiniz.</h2>
           <p>Ebeveyn hesabınıza giriş yapın.</p>
+          {verifyMessage && <p className="notice">E-posta adresinizi doğrulayın, ardından giriş yapın.</p>}
+          {invalid && <p className="errorNotice">E-posta veya şifre hatalı.</p>}
           <div className="field"><label>E-posta</label><input type="email" name="email" autoComplete="email" required /></div>
           <div className="field"><label>Şifre</label><input type="password" name="password" autoComplete="current-password" minLength={12} required /></div>
           <button className="primaryButton full" type="submit">Giriş yap</button>

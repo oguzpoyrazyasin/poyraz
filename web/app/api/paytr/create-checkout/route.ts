@@ -1,6 +1,7 @@
 import crypto from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import { createPaytrIframeToken } from "@/lib/paytr";
 import { plans } from "@/lib/plans";
 
@@ -40,8 +41,9 @@ export async function POST(request: NextRequest) {
     const basketBase64 = Buffer.from(JSON.stringify(basket), "utf8").toString("base64");
 
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || request.nextUrl.origin;
+    const admin = createSupabaseAdminClient();
 
-    const { error: updateError } = await supabase
+    const { error: updateError } = await admin
       .from("subscriptions")
       .update({
         plan_id: plan.id,

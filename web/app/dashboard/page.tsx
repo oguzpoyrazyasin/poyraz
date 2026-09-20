@@ -55,7 +55,7 @@ export default async function DashboardPage() {
             <h3>Üyelik</h3>
             <p><b>{subscription?.plan_id || "Family"}</b> planı</p>
             <p className="formHint">{trialing ? "Deneme sonunda ücret alınmaz; devam etmek için ödeme onayı gerekir." : "Abonelik durumunuzu hesap bölümünden yönetebilirsiniz."}</p>
-            <Link href="/#fiyat" className="primaryButton full">Planları görüntüle</Link>
+            <Link href="/billing" className="primaryButton full">Planı ve ödemeyi yönet</Link>
           </aside>
         </div>
       </div>

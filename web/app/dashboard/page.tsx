@@ -3,6 +3,8 @@ import { redirect } from "next/navigation";
 import { signOut } from "@/app/auth/actions";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
+export const dynamic = "force-dynamic";
+
 function remainingDays(endsAt?: string | null) {
   if (!endsAt) return 0;
   const ms = new Date(endsAt).getTime() - Date.now();
@@ -14,15 +16,20 @@ export default async function DashboardPage() {
   const { data: authData } = await supabase.auth.getUser();
   if (!authData.user) redirect("/login");
 
-  const [{ data: profile }, { data: subscription }] = await Promise.all([
+  const [{ data: profile }, { data: subscription }, { count: childCount }] = await Promise.all([
     supabase.from("profiles").select("full_name").eq("id", authData.user.id).maybeSingle(),
     supabase.from("subscriptions")
       .select("plan_id,status,trial_ends_at,current_period_end")
       .eq("parent_id", authData.user.id)
       .order("created_at", { ascending: false })
       .limit(1)
-      .maybeSingle()
+      .maybeSingle(),
+    supabase.from("child_profiles")
+      .select("id", { count: "exact", head: true })
+      .eq("parent_id", authData.user.id)
   ]);
+
+  if ((childCount || 0) === 0) redirect("/onboarding");
 
   const days = remainingDays(subscription?.trial_ends_at);
   const trialing = subscription?.status === "trialing";
@@ -31,7 +38,10 @@ export default async function DashboardPage() {
     <main className="dash">
       <nav className="dashNav">
         <Link className="brand" href="/"><span className="brandMark">P</span><span>Poyraz Kids</span></Link>
-        <form action={signOut}><button className="ghostButton" type="submit">Çıkış</button></form>
+        <div className="dashActions">
+          <Link className="ghostButton" href="/library">İçerik kütüphanesi</Link>
+          <form action={signOut}><button className="ghostButton" type="submit">Çıkış</button></form>
+        </div>
       </nav>
       <div className="dashShell">
         <div className="welcome">
@@ -49,6 +59,9 @@ export default async function DashboardPage() {
               <div className="miniActivity"><div><b>Hikâyeyi Tamamla</b><br/><small>Dil • 8 dakika</small></div><span>▶</span></div>
               <div className="miniActivity"><div><b>Şekil Avı</b><br/><small>Erken Matematik • 7 dakika</small></div><span>◆</span></div>
               <div className="miniActivity"><div><b>Hareket Molası</b><br/><small>Kaba Motor • ekran dışı</small></div><span>↗</span></div>
+            </div>
+            <div className="panelAction">
+              <Link href="/library" className="primaryButton">Tüm önerileri aç</Link>
             </div>
           </section>
           <aside className="panel">

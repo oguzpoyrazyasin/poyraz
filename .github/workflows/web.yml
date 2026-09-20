@@ -17,6 +17,15 @@ jobs:
     defaults:
       run:
         working-directory: web
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: https://example.supabase.co
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ci-placeholder-anon-key
+      SUPABASE_SERVICE_ROLE_KEY: ci-placeholder-service-role
+      NEXT_PUBLIC_SITE_URL: https://example.com
+      PAYTR_MERCHANT_ID: "000000"
+      PAYTR_MERCHANT_KEY: ci-placeholder-key
+      PAYTR_MERCHANT_SALT: ci-placeholder-salt
+      PAYTR_TEST_MODE: "1"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -25,4 +34,5 @@ jobs:
           cache: "npm"
           cache-dependency-path: web/package.json
       - run: npm install
+      - run: npm audit --omit=dev --audit-level=high
       - run: npm run build

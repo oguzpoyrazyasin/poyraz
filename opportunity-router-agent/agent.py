@@ -11,8 +11,10 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 from urllib.error import HTTPError, URLError
-from urllib.parse import urlencode
+from urllib.parse import urlencode, urlparse
 from urllib.request import Request, urlopen
+
+from verifier import verify_record
 
 API = "https://api.github.com"
 REPORT_TITLE = "[Opportunity Router] Latest ranked opportunities"
@@ -27,23 +29,26 @@ EXCLUDED_TERMS = {
     "ransomware", "cve", "xss", "sql injection", "ddos", "brute force",
 }
 CURRENCY_RE = re.compile(
-    r"(?:(?:US?\\$|\\$|€|EUR\\s?|USD\\s?)(\\d{1,3}(?:[.,]\\d{3})*(?:[.,]\\d+)?))|"
-    r"(?:(\\d{1,3}(?:[.,]\\d{3})*(?:[.,]\\d+)?)\\s?(?:USD|EUR|dollars?|euros?))",
+    r"(?:(?:US?\$|\$|€|EUR\s?|USD\s?)(\d{1,3}(?:[.,]\d{3})*(?:[.,]\d+)?))|"
+    r"(?:(\d{1,3}(?:[.,]\d{3})*(?:[.,]\d+)?)\s?(?:USD|EUR|dollars?|euros?))",
     re.IGNORECASE,
 )
+
 
 def now_utc() -> datetime:
     return datetime.now(timezone.utc)
 
+
 def parse_dt(value: str) -> datetime:
     return datetime.fromisoformat(value.replace("Z", "+00:00"))
+
 
 def github_request(method: str, path: str, token: str | None, payload: dict[str, Any] | None = None) -> Any:
     url = path if path.startswith("http") else f"{API}{path}"
     headers = {
         "Accept": "application/vnd.github+json",
         "X-GitHub-Api-Version": "2022-11-28",
-        "User-Agent": "opportunity-router-agent/0.1",
+        "User-Agent": "opportunity-router-agent/0.2",
     }
     if token:
         headers["Authorization"] = f"Bearer {token}"
@@ -62,6 +67,7 @@ def github_request(method: str, path: str, token: str | None, payload: dict[str,
     except URLError as exc:
         raise RuntimeError(f"Network error calling GitHub API: {exc}") from exc
 
+
 def normalize_amount(raw: str) -> float | None:
     s = raw.strip().replace(" ", "")
     if "," in s and "." in s:
@@ -78,6 +84,7 @@ def normalize_amount(raw: str) -> float | None:
     except ValueError:
         return None
 
+
 def extract_reward(text: str) -> float | None:
     amounts: list[float] = []
     for match in CURRENCY_RE.finditer(text):
@@ -88,9 +95,21 @@ def extract_reward(text: str) -> float | None:
                 amounts.append(value)
     return max(amounts) if amounts else None
 
+
 def is_excluded(text: str) -> bool:
     low = text.lower()
     return any(term in low for term in EXCLUDED_TERMS)
+
+
+def parse_issue_url(url: str) -> tuple[str, int] | None:
+    try:
+        parts = [x for x in urlparse(url).path.split("/") if x]
+        if len(parts) >= 4 and parts[2] == "issues":
+            return f"{parts[0]}/{parts[1]}", int(parts[3])
+    except (ValueError, TypeError):
+        return None
+    return None
+
 
 @dataclass
 class Opportunity:
@@ -102,8 +121,13 @@ class Opportunity:
     labels: list[str]
     comments: int
     reward_estimate: float | None
-    score: float
+    discovery_score: float
+    verification_score: int
+    verification_status: str
+    final_score: float
     rationale: list[str]
+    risks: list[str]
+
 
 def score_issue(item: dict[str, Any]) -> Opportunity | None:
     title = item.get("title") or ""
@@ -158,6 +182,7 @@ def score_issue(item: dict[str, Any]) -> Opportunity | None:
         score -= 6
         rationale.append("high discussion/competition")
 
+    discovery_score = round(max(0.0, min(100.0, score)), 1)
     return Opportunity(
         title=title.strip(),
         url=str(item.get("html_url") or ""),
@@ -167,13 +192,55 @@ def score_issue(item: dict[str, Any]) -> Opportunity | None:
         labels=labels,
         comments=comments,
         reward_estimate=reward,
-        score=round(max(0.0, min(100.0, score)), 1),
+        discovery_score=discovery_score,
+        verification_score=0,
+        verification_status="UNVERIFIED",
+        final_score=round(discovery_score * 0.45, 1),
         rationale=rationale,
+        risks=[],
     )
 
-def discover(token: str | None, max_results: int) -> list[Opportunity]:
+
+def verify_opportunity(op: Opportunity, token: str | None) -> Opportunity:
+    parsed = parse_issue_url(op.url)
+    if not parsed:
+        op.verification_status = "REJECT"
+        op.risks.append("could not parse GitHub issue URL")
+        return op
+
+    repo, issue_number = parsed
+    try:
+        issue = github_request("GET", f"/repos/{repo}/issues/{issue_number}", token)
+        repository = github_request("GET", f"/repos/{repo}", token)
+        comments: list[dict[str, Any]] = []
+        if int(issue.get("comments") or 0) > 0:
+            comments = github_request(
+                "GET",
+                f"/repos/{repo}/issues/{issue_number}/comments?per_page=30",
+                token,
+            ) or []
+
+        verification = verify_record(issue, repository, comments)
+        op.verification_score = verification.score
+        op.verification_status = verification.status
+        op.rationale.extend(verification.reasons)
+        op.risks.extend(verification.risks)
+        op.final_score = round(
+            min(100.0, op.discovery_score * 0.45 + verification.score * 0.55),
+            1,
+        )
+    except Exception as exc:
+        op.verification_status = "REVIEW"
+        op.risks.append(f"verification API error: {exc}")
+        op.final_score = round(op.discovery_score * 0.45, 1)
+    return op
+
+
+def discover(token: str | None, max_results: int, max_verify: int) -> list[Opportunity]:
     seen: set[str] = set()
     opportunities: list[Opportunity] = []
+    candidate_limit = max(max_results * 3, max_verify)
+
     for query in DEFAULT_QUERIES:
         params = urlencode({"q": query, "sort": "updated", "order": "desc", "per_page": 50})
         data = github_request("GET", f"/search/issues?{params}", token)
@@ -185,36 +252,67 @@ def discover(token: str | None, max_results: int) -> list[Opportunity]:
             scored = score_issue(item)
             if scored:
                 opportunities.append(scored)
-        time.sleep(0.3)
-    opportunities.sort(key=lambda x: (x.score, x.reward_estimate or 0), reverse=True)
-    return opportunities[:max_results]
+        time.sleep(0.2)
+
+    opportunities.sort(key=lambda x: (x.discovery_score, x.reward_estimate or 0), reverse=True)
+    opportunities = opportunities[:candidate_limit]
+
+    for idx, op in enumerate(opportunities[:max_verify], start=1):
+        print(f"Verifying {idx}/{min(max_verify, len(opportunities))}: {op.url}")
+        verify_opportunity(op, token)
+        time.sleep(0.15)
+
+    verified = [op for op in opportunities if op.verification_status != "REJECT"]
+    verified.sort(
+        key=lambda x: (
+            x.verification_status == "VERIFIED",
+            x.final_score,
+            x.reward_estimate or 0,
+        ),
+        reverse=True,
+    )
+    return verified[:max_results]
+
 
 def render_markdown(opportunities: list[Opportunity]) -> str:
     stamp = now_utc().strftime("%Y-%m-%d %H:%M UTC")
     lines = [
         f"# Opportunity Router — {stamp}",
         "",
-        "This agent discovers and ranks public, non-security GitHub reward/bounty signals. It does **not** submit work, exploit systems, accept terms, or move money automatically.",
+        "v0.2 adds a Verification Agent. Results are discovery signals, not guaranteed payouts. No work is automatically accepted or submitted.",
         "",
         "## Ranked opportunities",
         "",
-        "| Score | Reward signal | Opportunity | Why it ranked |",
-        "|---:|---:|---|---|",
+        "| Final | Verify | Reward signal | Opportunity | Key risk |",
+        "|---:|---|---:|---|---|",
     ]
     if not opportunities:
-        lines.append("| — | — | No eligible opportunities found in this run | — |")
+        lines.append("| — | — | — | No eligible opportunities found in this run | — |")
     for op in opportunities:
         reward = f"{op.reward_estimate:,.0f}" if op.reward_estimate else "not explicit"
-        why = "; ".join(op.rationale[:4]) or "matched discovery query"
+        risk = "; ".join(op.risks[:2]) if op.risks else "no immediate verification flag"
         safe_title = op.title.replace("|", "\\|")
-        lines.append(f"| {op.score:.1f} | {reward} | [{safe_title}]({op.url}) | {why} |")
+        lines.append(
+            f"| {op.final_score:.1f} | {op.verification_status} ({op.verification_score}) | "
+            f"{reward} | [{safe_title}]({op.url}) | {risk} |"
+        )
+
+    verified_count = sum(1 for op in opportunities if op.verification_status == "VERIFIED")
+    review_count = sum(1 for op in opportunities if op.verification_status == "REVIEW")
     lines += [
         "",
-        "## Human approval gate",
+        f"**Queue:** {verified_count} VERIFIED · {review_count} REVIEW",
         "",
-        "Before acting on any result: verify repository ownership, current bounty terms, eligibility, payout method, tax/KYC requirements, scope, and whether the issue is still unclaimed. No task is automatically accepted or submitted.",
+        "## Approval policy",
+        "",
+        "- VERIFIED means the public GitHub signals passed the automated trust threshold; it does not guarantee payment.",
+        "- REVIEW requires a human check before any work starts.",
+        "- REJECT items are removed from the published queue.",
+        "- Before acting: confirm current bounty terms, eligibility, payout method, tax/KYC requirements, scope and claim status.",
+        "- The agent does not accept terms, submit PRs, create payout accounts, perform KYC, move funds, or run vulnerability/exploit automation.",
     ]
     return "\n".join(lines) + "\n"
+
 
 def write_reports(opportunities: list[Opportunity]) -> tuple[Path, Path]:
     out = Path(__file__).resolve().parent / "output"
@@ -223,12 +321,16 @@ def write_reports(opportunities: list[Opportunity]) -> tuple[Path, Path]:
     md_path = out / "LATEST.md"
     payload = {
         "generated_at": now_utc().isoformat(),
+        "version": "0.2",
         "count": len(opportunities),
+        "verified": sum(1 for x in opportunities if x.verification_status == "VERIFIED"),
+        "review": sum(1 for x in opportunities if x.verification_status == "REVIEW"),
         "opportunities": [asdict(x) for x in opportunities],
     }
     json_path.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
     md_path.write_text(render_markdown(opportunities), encoding="utf-8")
     return json_path, md_path
+
 
 def publish_issue(token: str, repo: str, body: str) -> None:
     issues = github_request("GET", f"/repos/{repo}/issues?state=open&per_page=100", token)
@@ -241,12 +343,14 @@ def publish_issue(token: str, repo: str, body: str) -> None:
         created = github_request("POST", f"/repos/{repo}/issues", token, payload)
         print(f"Created issue #{created.get('number')}")
 
+
 def main() -> int:
     token = os.getenv("GITHUB_TOKEN")
     repo = os.getenv("GITHUB_REPOSITORY")
     max_results = int(os.getenv("MAX_RESULTS", "25"))
+    max_verify = int(os.getenv("MAX_VERIFY", "20"))
     try:
-        opportunities = discover(token, max_results)
+        opportunities = discover(token, max_results, max_verify)
         json_path, md_path = write_reports(opportunities)
         print(f"Wrote {json_path} and {md_path}; {len(opportunities)} opportunities")
         if token and repo and os.getenv("PUBLISH_ISSUE", "true").lower() == "true":
@@ -255,6 +359,7 @@ def main() -> int:
     except Exception as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         return 1
+
 
 if __name__ == "__main__":
     raise SystemExit(main())

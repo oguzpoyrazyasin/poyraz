@@ -1,4 +1,5 @@
 import agent
+from verifier import verify_record
 
 sample = {
     "title": "Implement parser — $500 bounty",
@@ -15,6 +16,50 @@ sample = {
 opportunity = agent.score_issue(sample)
 assert opportunity is not None
 assert opportunity.reward_estimate == 500.0
-assert opportunity.score >= 50
+assert opportunity.discovery_score >= 50
 assert agent.score_issue({**sample, "body": "security vulnerability bounty"}) is None
-print("Opportunity Router tests passed")
+
+verified = verify_record(
+    {
+        "state": "open",
+        "author_association": "MEMBER",
+        "title": "[BOUNTY $200] Build workflow",
+        "body": "Paid on merge",
+        "assignees": [],
+        "locked": False,
+    },
+    {"archived": False},
+    [],
+)
+assert verified.status == "VERIFIED"
+assert verified.score >= 65
+
+review = verify_record(
+    {
+        "state": "open",
+        "author_association": "MEMBER",
+        "title": "[Bounty proposal] Build workflow",
+        "body": "Proposed $50 reward paid on merge",
+        "assignees": [],
+        "locked": False,
+    },
+    {"archived": False},
+    [],
+)
+assert review.status == "REVIEW"
+
+claimed = verify_record(
+    {
+        "state": "open",
+        "author_association": "MEMBER",
+        "title": "[BOUNTY $200] Build workflow",
+        "body": "Paid on merge",
+        "assignees": [{"login": "someone"}],
+        "locked": False,
+    },
+    {"archived": False},
+    [{"body": "I am working on this"}],
+)
+assert claimed.score < verified.score
+
+print("Opportunity Router v0.2 tests passed")

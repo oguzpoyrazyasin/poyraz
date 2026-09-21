@@ -1,83 +1,217 @@
 <!doctype html>
-<html lang="en">
+<html lang="tr">
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>DemandForge — Autonomous Commerce OS</title>
+<title>DemandForge Search — Global Product & Supplier Intelligence</title>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#08111c;color:#edf4fa}.shell{display:grid;grid-template-columns:240px 1fr;min-height:100vh}.side{background:#0d1724;border-right:1px solid #1f2c3e;padding:26px 18px;position:sticky;top:0;height:100vh}.brand{font-size:24px;font-weight:800;letter-spacing:-1px}.brand span{color:#7de2b8}.sub{font-size:12px;color:#7f8ea4;margin-top:6px;line-height:1.45}nav{display:grid;gap:8px;margin-top:32px}nav a{padding:10px 12px;color:#91a2b7;border-radius:10px;font-size:13px}nav a.active{background:#172537;color:#fff}.safe{position:absolute;bottom:18px;left:18px;right:18px;border:1px solid #26364b;border-radius:10px;padding:10px;color:#8090a7;font-size:10px;line-height:1.45}main{padding:34px;max-width:1400px;width:100%;margin:auto}.eyebrow{font-size:11px;font-weight:800;letter-spacing:1.4px;color:#71d8b0}h1{font-size:40px;letter-spacing:-1.6px;margin:8px 0 5px}.muted{color:#8394aa}.card{background:#101c2a;border:1px solid #24334a;border-radius:16px;box-shadow:0 18px 50px rgba(0,0,0,.2)}.composer{padding:16px;margin-top:24px}.composer textarea{width:100%;min-height:105px;background:transparent;border:0;outline:0;resize:vertical;color:#fff;font:inherit;font-size:17px;line-height:1.55}.row{display:flex;justify-content:space-between;align-items:center;gap:12px}.composer .row{border-top:1px solid #243146;padding-top:12px}button{border:0;border-radius:10px;background:#7de2b8;color:#07130f;padding:11px 15px;font-weight:800;cursor:pointer}.metrics{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin:18px 0}.metric{padding:14px}.metric span{display:block;color:#7f90a8;font-size:11px}.metric b{display:block;font-size:23px;margin-top:7px}.grid2{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}.panel{padding:18px}.tag{font-size:10px;padding:5px 8px;border-radius:999px;border:1px solid #38506a;color:#9ec8e9}.green{color:#7de2b8;border-color:#285d4b;background:#10261f}.amber{color:#ffd486;border-color:#6d5327;background:#2a2111}pre{background:#09131f;border-radius:12px;padding:14px;overflow:auto;color:#a9c8e6;font-size:12px}.slider{display:grid;gap:8px;margin:20px 0;font-size:12px;color:#c8d4df}.slider input{accent-color:#7de2b8}.options{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:13px}.opt{padding:18px}.opt.balanced{outline:1px solid #4a9b7d}.price{font-size:30px;font-weight:850;margin:14px 0}.lines{display:grid;gap:8px}.lines div{display:flex;justify-content:space-between;font-size:12px;border-bottom:1px solid #213047;padding-bottom:8px}.lines span{color:#8293a9}.factory{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #233047;padding:12px 0}.factory small{display:block;color:#77889f;margin-top:4px}.agents{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px}.agent{background:#0b1521;border:1px solid #1f2d40;border-radius:10px;padding:10px}.agent b,.agent span{display:block;font-size:11px}.agent span{color:#72849b;margin-top:4px}.section{margin-top:24px}.footer{margin:26px 0 8px;color:#667991;font-size:11px}@media(max-width:980px){.shell{grid-template-columns:1fr}.side{display:none}.metrics{grid-template-columns:repeat(3,1fr)}.grid2,.options{grid-template-columns:1fr}}@media(max-width:600px){main{padding:18px}.metrics{grid-template-columns:repeat(2,1fr)}h1{font-size:31px}.composer .row{align-items:flex-start;flex-direction:column}}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#07111d;color:#edf4fa}.shell{display:grid;grid-template-columns:250px 1fr;min-height:100vh}.side{background:#0c1724;border-right:1px solid #1f2d40;padding:26px 18px;position:sticky;top:0;height:100vh}.brand{font-size:24px;font-weight:850;letter-spacing:-1px}.brand span{color:#7de2b8}.sub{font-size:12px;color:#7f91a7;margin-top:6px;line-height:1.45}nav{display:grid;gap:8px;margin-top:32px}nav a{padding:10px 12px;color:#91a2b7;border-radius:10px;font-size:13px;cursor:default}nav a.active{background:#172638;color:#fff}.safe{position:absolute;bottom:18px;left:18px;right:18px;border:1px solid #26364b;border-radius:10px;padding:10px;color:#8090a7;font-size:10px;line-height:1.45}main{padding:32px;max-width:1480px;width:100%;margin:auto}.eyebrow{font-size:11px;font-weight:800;letter-spacing:1.4px;color:#71d8b0}.hero{display:flex;justify-content:space-between;gap:18px;align-items:flex-start}h1{font-size:40px;letter-spacing:-1.6px;margin:8px 0 5px}.muted{color:#8394aa}.tag{font-size:10px;padding:5px 8px;border-radius:999px;border:1px solid #38506a;color:#9ec8e9;display:inline-flex;align-items:center;gap:5px}.green{color:#7de2b8;border-color:#285d4b;background:#10261f}.amber{color:#ffd486;border-color:#6d5327;background:#2a2111}.red{color:#ff9c9c;border-color:#6c3434;background:#281414}.card{background:#101c2a;border:1px solid #24334a;border-radius:16px;box-shadow:0 18px 50px rgba(0,0,0,.18)}.searchbox{margin-top:24px;padding:12px;display:grid;grid-template-columns:1fr auto;gap:10px}.searchbox input{width:100%;height:50px;border:0;outline:0;background:#0a1522;color:#fff;border-radius:12px;padding:0 16px;font:inherit;font-size:16px;border:1px solid #22334a}.searchbox button{min-width:132px;border:0;border-radius:12px;background:#7de2b8;color:#07130f;font-weight:850;padding:0 18px;cursor:pointer;font-size:14px}.examples{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.chip{background:#0d1926;border:1px solid #26374d;color:#9eb0c5;border-radius:999px;padding:7px 10px;font-size:11px;cursor:pointer}.summary{margin-top:18px;padding:14px 16px;display:flex;justify-content:space-between;gap:14px;align-items:center}.intent{display:flex;gap:7px;flex-wrap:wrap}.layout{display:grid;grid-template-columns:220px 1fr;gap:16px;margin-top:16px}.filters{padding:16px;height:max-content;position:sticky;top:18px}.filters h3{margin:0 0 14px;font-size:14px}.fgroup{margin:15px 0}.fgroup label{display:block;color:#8fa0b5;font-size:11px;margin-bottom:7px}.fgroup select,.fgroup input[type=number]{width:100%;background:#0a1522;border:1px solid #293a50;color:#dce6f0;border-radius:9px;padding:9px}.check{display:flex;gap:8px;align-items:center;color:#c3cfdb;font-size:12px}.check input{accent-color:#7de2b8}.resultsHead{display:flex;justify-content:space-between;align-items:center;margin:3px 0 12px}.resultsHead h2{margin:0;font-size:18px}.results{display:grid;gap:12px}.result{padding:18px;display:grid;grid-template-columns:minmax(220px,1.4fr) minmax(320px,1fr);gap:18px;transition:.18s transform,.18s border-color}.result:hover{transform:translateY(-1px);border-color:#38506a}.result h3{margin:0;font-size:17px}.supplier{color:#87a0bb;font-size:12px;margin-top:5px}.desc{color:#a8b7c8;font-size:12px;line-height:1.55;margin:11px 0}.tags{display:flex;gap:6px;flex-wrap:wrap}.ptag{font-size:10px;padding:4px 7px;border-radius:999px;background:#0a1522;border:1px solid #26384e;color:#9fb2c7}.scorebar{height:7px;background:#0a1420;border-radius:999px;overflow:hidden;margin-top:6px}.scorebar i{display:block;height:100%;background:#7de2b8;border-radius:999px}.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.fact{background:#0a1522;border:1px solid #223247;border-radius:10px;padding:10px}.fact span{display:block;color:#788ca5;font-size:10px}.fact b{display:block;margin-top:4px;font-size:13px}.actions{display:flex;justify-content:flex-end;gap:8px;margin-top:12px}.secondary,.primary{border:0;border-radius:9px;padding:9px 11px;font-weight:800;cursor:pointer}.secondary{background:#182637;color:#c8d5e2}.primary{background:#7de2b8;color:#07130f}.empty{padding:34px;text-align:center;color:#8fa0b5}.modal{position:fixed;inset:0;background:rgba(2,6,12,.72);display:none;align-items:center;justify-content:center;padding:18px;z-index:30}.modal.open{display:flex}.modalCard{width:min(720px,100%);max-height:90vh;overflow:auto;background:#0d1825;border:1px solid #2d415b;border-radius:18px;padding:20px}.modalCard h2{margin-top:0}.detailGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.detail{background:#08131f;border:1px solid #223349;border-radius:10px;padding:11px}.detail span{display:block;color:#7387a0;font-size:10px}.detail b{display:block;margin-top:4px;font-size:13px}.close{float:right;background:#182638;color:#dce6f0;border:0;border-radius:8px;padding:7px 10px;cursor:pointer}.footer{margin:28px 0 8px;color:#667991;font-size:11px}.tiny{font-size:10px;color:#6f8299}@media(max-width:1100px){.shell{grid-template-columns:1fr}.side{display:none}.layout{grid-template-columns:1fr}.filters{position:static;display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.fgroup{margin:0}.filters h3{grid-column:1/-1}.check{align-self:end}}@media(max-width:760px){main{padding:18px}.hero{flex-direction:column}.searchbox{grid-template-columns:1fr}.searchbox button{height:46px}.layout{display:block}.filters{display:grid;grid-template-columns:1fr 1fr;margin-bottom:14px}.result{grid-template-columns:1fr}.facts{grid-template-columns:repeat(2,1fr)}h1{font-size:31px}.summary{align-items:flex-start;flex-direction:column}}
 </style>
 </head>
 <body>
 <div class="shell">
 <aside class="side">
-  <div class="brand">DemandForge<span>AI</span></div>
-  <div class="sub">Autonomous Demand-to-Factory Commerce OS</div>
-  <nav>
-    <a class="active">Commerce Studio</a><a>Supplier Intelligence</a><a>RFQ Control</a><a>Orders</a><a>Policy & Approvals</a><a>Agent Control</a><a>Audit</a>
-  </nav>
-  <div class="safe">GITHUB PAGES DEMO<br><b>No real purchase, payment, advertising spend or supplier commitment.</b></div>
+  <div class="brand">DemandForge<span>Search</span></div>
+  <div class="sub">Global Product & Supplier Intelligence</div>
+  <nav><a class="active">Product Search</a><a>Supplier Intelligence</a><a>RFQ Workspace</a><a>Saved Searches</a><a>Orders</a><a>Risk & Compliance</a></nav>
+  <div class="safe">SEARCH DEMO<br><b>Search and supplier data are demo records. No real order, payment or supplier contact is executed.</b></div>
 </aside>
+
 <main>
-  <div class="row">
-    <div><div class="eyebrow">INTENT → SPEC → FACTORY → QUOTE → COMMERCE</div><h1>What are you trying to create?</h1><div class="muted">Describe the outcome. DemandForge converts it into a Product Genome and commercial scenarios.</div></div>
-    <span class="tag green">LIVE DEMO</span>
-  </div>
-  <section class="composer card">
-    <textarea id="q">I want a minimalist personalized rechargeable table lamp under €50, 50 pcs, delivered to Germany within 10 days.</textarea>
-    <div class="row"><span class="muted" style="font-size:12px">market • budget • SLA • quantity • customization</span><button id="go">Compile Product Genome</button></div>
-  </section>
-
-  <section class="metrics">
-    <div class="metric card"><span>Active sourcing</span><b>4</b></div><div class="metric card"><span>Supplier response</span><b>78%</b></div><div class="metric card"><span>RFQ→Offer</span><b>5.6h</b></div><div class="metric card"><span>Expected CM</span><b>34%</b></div><div class="metric card"><span>Orders at risk</span><b>1</b></div><div class="metric card"><span>Approvals</span><b>2</b></div>
-  </section>
-
-  <section class="grid2">
-    <div class="card panel"><div class="row"><h2>Product Genome</h2><span class="tag">source of truth</span></div><pre id="genome"></pre></div>
-    <div class="card panel"><div class="row"><h2>Optimization controls</h2><span class="tag">live constraints</span></div>
-      <label class="slider">Price ↔ Quality<input type="range" value="48"></label>
-      <label class="slider">Delivery ↔ Cost<input type="range" value="62"></label>
-      <label class="slider">Custom ↔ Standard<input type="range" value="72"></label>
-      <label class="slider">Low MOQ ↔ Scale<input type="range" value="35"></label>
-      <div class="muted" style="font-size:11px">Demo calculations run locally in the browser. Production mode will use live supplier, logistics and compliance connectors.</div>
+  <div class="hero">
+    <div>
+      <div class="eyebrow">SEARCH → COMPARE → COST → SUPPLIER → RFQ</div>
+      <h1>Ne arıyorsun?</h1>
+      <div class="muted">Ürünü doğal dille tarif et. Fiyat, teslimat, MOQ, özellik ve tedarikçi riskini tek aramada karşılaştır.</div>
     </div>
+    <span class="tag green">SEARCH ENGINE MODE</span>
+  </div>
+
+  <section class="searchbox card">
+    <input id="q" placeholder="Örn: Almanya'ya 10 günde gelecek, 50 € altında, kişiselleştirilebilir şarjlı masa lambası"/>
+    <button id="searchBtn">Ara</button>
+  </section>
+  <div class="examples">
+    <button class="chip">50 € altında minimalist masa lambası Almanya 10 gün</button>
+    <button class="chip">logo baskılı çelik termos 100 adet</button>
+    <button class="chip">wireless charger under €20 EU</button>
+    <button class="chip">eco friendly bamboo organizer</button>
+    <button class="chip">premium pet water fountain</button>
+  </div>
+
+  <section class="summary card">
+    <div>
+      <b id="summaryTitle">Tüm ürünler</b>
+      <div class="tiny" id="summarySub">Katalog içindeki ürün ve tedarikçi kayıtları relevance skoruna göre sıralanır.</div>
+    </div>
+    <div class="intent" id="intent"></div>
   </section>
 
-  <section class="section"><div class="row"><h2>Pareto commercial options</h2><span class="muted" style="font-size:12px">Trade-offs stay explicit.</span></div><div class="options" id="opts"></div></section>
+  <div class="layout">
+    <aside class="filters card">
+      <h3>Filtreler</h3>
+      <div class="fgroup"><label>Kategori</label><select id="category"><option value="">Tümü</option></select></div>
+      <div class="fgroup"><label>Maks. satış fiyatı (€)</label><input id="maxPrice" type="number" min="1" placeholder="Örn. 50"/></div>
+      <div class="fgroup"><label>Maks. teslimat (gün)</label><input id="maxDays" type="number" min="1" placeholder="Örn. 10"/></div>
+      <div class="fgroup"><label>Sıralama</label><select id="sort"><option value="relevance">En alakalı</option><option value="price">En düşük fiyat</option><option value="delivery">En hızlı teslimat</option><option value="score">En yüksek supplier score</option></select></div>
+      <label class="check"><input id="verified" type="checkbox"/> Sadece verified supplier</label>
+    </aside>
 
-  <section class="grid2 section">
-    <div class="card panel"><div class="row"><h2>Factory Intelligence</h2><span class="tag">3 candidates</span></div><div id="factories"></div></div>
-    <div class="card panel"><div class="row"><h2>Agent Control Plane</h2><span class="tag">16 agents</span></div><div class="agents" id="agents"></div></div>
-  </section>
-  <div class="footer">DemandForge MVP • Static GitHub Pages demo • High-impact commercial actions remain approval-gated.</div>
+    <section>
+      <div class="resultsHead"><h2 id="count">0 sonuç</h2><span class="tiny">Local search index • instant scoring</span></div>
+      <div class="results" id="results"></div>
+    </section>
+  </div>
+  <div class="footer">DemandForge Search MVP • GitHub Pages • Product discovery + supplier intelligence + landed-cost visibility.</div>
 </main>
 </div>
+
+<div class="modal" id="modal">
+  <div class="modalCard">
+    <button class="close" id="close">Kapat</button>
+    <h2 id="mTitle"></h2>
+    <p class="muted" id="mDesc"></p>
+    <div class="detailGrid" id="mGrid"></div>
+    <h3 style="margin-top:18px">Neden eşleşti?</h3>
+    <div class="tags" id="mWhy"></div>
+    <h3 style="margin-top:18px">RFQ taslağı</h3>
+    <pre id="rfq" style="background:#07111d;border-radius:10px;padding:12px;overflow:auto;color:#a9c7e4;font-size:11px"></pre>
+  </div>
+</div>
+
 <script>
-const suppliers=[
- {name:'Shenzhen LumenWorks',loc:'Shenzhen, China',moq:50,score:94,risk:'LOW RISK'},
- {name:'Dongguan Nova Lighting',loc:'Dongguan, China',moq:100,score:91,risk:'LOW RISK'},
- {name:'Guangzhou Vela Home',loc:'Guangzhou, China',moq:30,score:69,risk:'REVIEW'}
+const synonymMap={
+  lamba:['lamp','lighting','masa','table','led'],
+  lamp:['lamba','lighting','table','led'],
+  termos:['bottle','flask','vacuum','steel'],
+  şişe:['bottle','flask'],
+  sarj:['rechargeable','usb-c','wireless'],
+  şarj:['rechargeable','usb-c','wireless'],
+  wireless:['kablosuz','charger','charging'],
+  kişiselleştirilebilir:['personalized','custom','engraving','logo'],
+  kişisel:['personalized','custom'],
+  logo:['custom','printing','engraving'],
+  bambu:['bamboo','eco','organizer'],
+  organizer:['storage','bamboo','desk'],
+  evcil:['pet','cat','dog'],
+  kedi:['pet','cat'],
+  köpek:['pet','dog'],
+  fountain:['water','pet','pump'],
+  mutfak:['kitchen','home'],
+  çelik:['steel','stainless'],
+  premium:['high quality','premium'],
+  ucuz:['budget','low cost'],
+  hızlı:['fast','delivery'],
+  almanya:['germany','de','eu'],
+  germany:['almanya','de','eu']
+};
+
+const products=[
+{id:'P001',name:'Minimalist Rechargeable Table Lamp',category:'Lighting',supplier:'Shenzhen LumenWorks',city:'Shenzhen',verified:true,unit:14.9,retail:44.9,landed:30.15,moq:50,days:9,score:94,risk:'LOW',tags:['lamp','lighting','table','minimalist','rechargeable','usb-c','personalized','engraving','logo','eu','germany'],desc:'USB-C şarjlı, dim edilebilir, lazer isim/logo opsiyonlu minimalist masa lambası.',compliance:['RoHS','CE technical file']},
+{id:'P002',name:'Premium Aluminium Ambient Lamp',category:'Lighting',supplier:'Dongguan Nova Lighting',city:'Dongguan',verified:true,unit:19.8,retail:59,landed:35.4,moq:100,days:7,score:91,risk:'LOW',tags:['lamp','lighting','ambient','aluminium','premium','usb-c','custom color','eu'],desc:'Alüminyum gövde, premium yüzey, özel renk ve OEM kutu seçenekli masa lambası.',compliance:['RoHS','EMC report']},
+{id:'P003',name:'Budget Touch LED Desk Lamp',category:'Lighting',supplier:'Guangzhou Vela Home',city:'Guangzhou',verified:false,unit:9.7,retail:32.9,landed:24.8,moq:30,days:12,score:69,risk:'REVIEW',tags:['lamp','lighting','desk','touch','budget','led','low cost'],desc:'Dokunmatik LED masa lambası; düşük MOQ, daha yüksek compliance review ihtiyacı.',compliance:['RoHS']},
+{id:'P004',name:'Stainless Vacuum Bottle 500 ml',category:'Drinkware',supplier:'Yongkang SteelPeak',city:'Zhejiang',verified:true,unit:5.6,retail:24.9,landed:11.8,moq:100,days:8,score:92,risk:'LOW',tags:['bottle','flask','vacuum','steel','stainless','termos','logo','printing','custom'],desc:'304 paslanmaz çelik termos; lazer logo ve renkli baskı opsiyonları.',compliance:['LFGB','FDA']},
+{id:'P005',name:'Premium Smart Temperature Bottle',category:'Drinkware',supplier:'Ningbo ThermoSmart',city:'Ningbo',verified:true,unit:9.4,retail:34.9,landed:17.9,moq:100,days:10,score:89,risk:'LOW',tags:['bottle','flask','temperature','smart','steel','premium','led cap'],desc:'Kapakta sıcaklık göstergesi bulunan çift cidarlı akıllı termos.',compliance:['LFGB','RoHS']},
+{id:'P006',name:'Bamboo Desk Organizer',category:'Home & Office',supplier:'Fujian GreenCraft',city:'Fuzhou',verified:true,unit:6.3,retail:27.9,landed:13.2,moq:80,days:11,score:90,risk:'LOW',tags:['bamboo','eco','organizer','desk','storage','home','office','sustainable'],desc:'Bambu masa düzenleyici; modüler bölmeler ve özel logo baskısı.',compliance:['FSC supplier docs']},
+{id:'P007',name:'Foldable Laptop Stand',category:'Home & Office',supplier:'Shenzhen ErgoBase',city:'Shenzhen',verified:true,unit:7.9,retail:29.9,landed:15.5,moq:50,days:8,score:93,risk:'LOW',tags:['laptop','stand','aluminium','desk','office','foldable','ergonomic'],desc:'Katlanabilir alüminyum laptop standı; hafif, CNC yüzeyli.',compliance:['Material declaration']},
+{id:'P008',name:'15W Magnetic Wireless Charger',category:'Electronics',supplier:'Shenzhen VoltEdge',city:'Shenzhen',verified:true,unit:6.8,retail:19.9,landed:13.7,moq:100,days:8,score:88,risk:'LOW',tags:['wireless','charger','charging','15w','magnetic','electronics','phone','usb-c','eu'],desc:'15W manyetik kablosuz şarj cihazı; USB-C giriş ve özel logo opsiyonu.',compliance:['CE','RoHS','EMC']},
+{id:'P009',name:'3-in-1 Foldable Charging Station',category:'Electronics',supplier:'Dongguan PowerNest',city:'Dongguan',verified:true,unit:13.5,retail:39.9,landed:23.6,moq:100,days:10,score:87,risk:'LOW',tags:['wireless','charger','charging','station','3-in-1','foldable','premium','electronics'],desc:'Telefon, saat ve kulaklık için katlanabilir 3-in-1 şarj istasyonu.',compliance:['CE','RoHS','EMC']},
+{id:'P010',name:'Automatic Pet Water Fountain',category:'Pet',supplier:'Shenzhen PawFlow',city:'Shenzhen',verified:true,unit:12.7,retail:39.9,landed:24.1,moq:50,days:9,score:90,risk:'LOW',tags:['pet','cat','dog','water','fountain','pump','automatic','premium'],desc:'Sessiz pompalı, filtreli otomatik evcil hayvan su pınarı.',compliance:['CE','RoHS']},
+{id:'P011',name:'Stainless Pet Water Fountain',category:'Pet',supplier:'Ningbo PetWorks',city:'Ningbo',verified:true,unit:17.2,retail:49.9,landed:29.8,moq:80,days:11,score:91,risk:'LOW',tags:['pet','cat','dog','water','fountain','stainless','steel','premium'],desc:'Paslanmaz çelik hazne, çok katmanlı filtre ve düşük gürültülü pompa.',compliance:['CE','RoHS']},
+{id:'P012',name:'Portable Mini Blender USB-C',category:'Kitchen',supplier:'Guangdong MixGo',city:'Foshan',verified:true,unit:10.6,retail:34.9,landed:20.2,moq:100,days:9,score:86,risk:'LOW',tags:['kitchen','blender','portable','usb-c','rechargeable','food','travel'],desc:'USB-C şarjlı portatif mini blender; kişisel kullanım ve seyahat odaklı.',compliance:['CE','LFGB','RoHS']},
+{id:'P013',name:'Silicone Air Fryer Basket',category:'Kitchen',supplier:'Dongguan KitchenFlex',city:'Dongguan',verified:true,unit:2.3,retail:14.9,landed:6.1,moq:200,days:8,score:90,risk:'LOW',tags:['kitchen','silicone','air fryer','basket','food grade','budget'],desc:'Tekrar kullanılabilir food-grade silikon air fryer haznesi.',compliance:['LFGB','FDA']},
+{id:'P014',name:'Custom Canvas Tote Bag',category:'Textile',supplier:'Yiwu PrintBag',city:'Yiwu',verified:true,unit:2.1,retail:12.9,landed:5.8,moq:100,days:7,score:88,risk:'LOW',tags:['bag','tote','canvas','textile','custom','printing','logo','eco'],desc:'Logo ve full-color baskı yapılabilen pamuk/canvas tote çanta.',compliance:['REACH docs']},
+{id:'P015',name:'RFID Minimalist Wallet',category:'Accessories',supplier:'Guangzhou UrbanCarry',city:'Guangzhou',verified:true,unit:4.9,retail:24.9,landed:10.9,moq:100,days:9,score:89,risk:'LOW',tags:['wallet','rfid','minimalist','accessories','custom','logo','gift'],desc:'RFID korumalı minimalist cüzdan; logo ve kutu özelleştirmesi.',compliance:['Material declaration']},
+{id:'P016',name:'Smart RGB Light Strip 5m',category:'Electronics',supplier:'Shenzhen GlowLink',city:'Shenzhen',verified:true,unit:7.2,retail:24.9,landed:14.8,moq:100,days:8,score:85,risk:'LOW',tags:['rgb','light','strip','smart','app','lighting','led','wifi','electronics'],desc:'Wi-Fi/app kontrollü 5 metre RGB LED şerit.',compliance:['CE','RoHS','EMC']}
 ];
-const agents=[['Intent Agent','A4'],['Product Architect','A3'],['Discovery Agent','A4'],['Factory Agent','A3'],['RFQ Agent','A3'],['Quote Parser','A4'],['Negotiation Agent','A2'],['Compliance Agent','A2'],['Logistics Agent','A3'],['Pricing Agent','A4'],['Creative Agent','A3'],['Order Agent','A1'],['QC Agent','A2'],['Support Agent','A3'],['Risk Agent','A4'],['Optimization Agent','A3']];
-function money(n){return new Intl.NumberFormat('en-DE',{style:'currency',currency:'EUR'}).format(n)}
-function compile(){
- const t=document.getElementById('q').value, l=t.toLowerCase();
- const price=Number((t.match(/(?:€|eur\s?)(\d+)/i)||[])[1]||50);
- const qty=Number((t.match(/(\d+)\s*(?:pcs|adet)/i)||[])[1]||50);
- const days=Number((t.match(/(\d+)\s*(?:day|gün)/i)||[])[1]||10);
- const g={category:(l.includes('lamp')||l.includes('lamba'))?'lighting.table_lamp':'custom_product',market:(l.includes('germany')||l.includes('almanya'))?'DE':'EU',targetRetailPrice:price,quantity:qty,maxMoq:100,targetGrossMargin:0.40,maxDeliveryDays:days,style:l.includes('minimal')?['minimalist']:['modern'],features:{rechargeable:/recharge|şarj|usb/i.test(t),personalized:/personal|kişisel|logo|isim/i.test(t)},complianceMarket:'EU'};
- document.getElementById('genome').textContent=JSON.stringify(g,null,2);
- const base=30.15;
- const opts=[
-  {tier:'Budget',supplier:suppliers[2],landed:base-3.1,retail:price-5,lead:12,del:72,qual:74,status:'REVIEW'},
-  {tier:'Balanced',supplier:suppliers[0],landed:base,retail:price,lead:9,del:90,qual:92,status:'PASS'},
-  {tier:'Premium',supplier:suppliers[1],landed:base+5,retail:price+9,lead:7,del:95,qual:95,status:'PASS'}
- ];
- document.getElementById('opts').innerHTML=opts.map(o=>{const m=((o.retail-o.landed)/o.retail*100).toFixed(1);return '<article class="opt card '+o.tier.toLowerCase()+'"><div class="row"><h3>'+o.tier+'</h3><span class="tag '+(o.status==='PASS'?'green':'amber')+'">'+o.status+'</span></div><div class="price">'+money(o.retail)+'</div><div class="lines"><div><span>Landed cost</span><b>'+money(o.landed)+'</b></div><div><span>Expected margin</span><b>'+m+'%</b></div><div><span>Lead time</span><b>'+o.lead+' days</b></div><div><span>Supplier score</span><b>'+o.supplier.score+'/100</b></div><div><span>Delivery confidence</span><b>'+o.del+'%</b></div><div><span>Quality confidence</span><b>'+o.qual+'%</b></div></div><div class="muted" style="font-size:12px;margin-top:12px">'+o.supplier.name+'</div></article>'}).join('');
+
+function normalize(s){return String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9€$ğüşöçıİ\s-]/gi,' ').replace(/\s+/g,' ').trim()}
+function expandTokens(text){
+  const raw=normalize(text).split(' ').filter(x=>x.length>1);
+  const out=new Set(raw);
+  raw.forEach(t=>{(synonymMap[t]||[]).forEach(x=>normalize(x).split(' ').forEach(y=>out.add(y)))});
+  return [...out];
 }
-document.getElementById('factories').innerHTML=suppliers.map(s=>'<div class="factory"><div><b>'+s.name+'</b><small>'+s.loc+' • MOQ '+s.moq+'</small></div><div class="row"><b>'+s.score+'</b><span class="tag '+(s.risk==='LOW RISK'?'green':'amber')+'">'+s.risk+'</span></div></div>').join('');
-document.getElementById('agents').innerHTML=agents.slice(0,10).map(a=>'<div class="agent"><b>'+a[0]+'</b><span>'+a[1]+' • READY</span></div>').join('');
-document.getElementById('go').onclick=compile;compile();
+function parseIntent(text){
+  const n=normalize(text);
+  const euro=(text.match(/(?:€|eur\s*)(\d+(?:[.,]\d+)?)/i)||[])[1];
+  const usd=(text.match(/(?:\$|usd\s*)(\d+(?:[.,]\d+)?)/i)||[])[1];
+  const days=(n.match(/(\d+)\s*(?:gun|gün|day|days)/i)||[])[1];
+  const qty=(n.match(/(\d+)\s*(?:adet|pcs|piece|pieces)/i)||[])[1];
+  return {maxPrice:euro?Number(euro.replace(',','.')):null,maxUsd:usd?Number(usd.replace(',','.')):null,maxDays:days?Number(days):null,qty:qty?Number(qty):null,country:/almanya|germany|\bde\b/.test(n)?'DE':(/europa|europe|\beu\b/.test(n)?'EU':null),tokens:expandTokens(text)};
+}
+function scoreProduct(p,intent){
+  const hay=normalize([p.name,p.category,p.supplier,p.city,p.desc,...p.tags,...p.compliance].join(' '));
+  let s=0, matched=[];
+  intent.tokens.forEach(t=>{if(hay.includes(t)){s+=p.name.toLowerCase().includes(t)?8:4;matched.push(t)}});
+  if(intent.maxPrice){if(p.retail<=intent.maxPrice){s+=10}else{s-=Math.min(20,(p.retail-intent.maxPrice)*1.2)}}
+  if(intent.maxDays){if(p.days<=intent.maxDays){s+=8}else{s-=Math.min(16,(p.days-intent.maxDays)*3)}}
+  if(intent.qty){if(p.moq<=intent.qty){s+=8}else{s-=Math.min(15,(p.moq-intent.qty)/10)}}
+  if(intent.country && p.tags.includes(intent.country.toLowerCase()))s+=5;
+  if(p.verified)s+=2;
+  s+=p.score/100;
+  return {score:s,matched:[...new Set(matched)]};
+}
+function search(){
+  const q=document.getElementById('q').value;
+  const intent=parseIntent(q);
+  if(intent.maxPrice)document.getElementById('maxPrice').value=intent.maxPrice;
+  if(intent.maxDays)document.getElementById('maxDays').value=intent.maxDays;
+  render(intent);
+}
+function render(intentOverride){
+  const q=document.getElementById('q').value;
+  const intent=intentOverride||parseIntent(q);
+  const cat=document.getElementById('category').value;
+  const maxPrice=Number(document.getElementById('maxPrice').value)||null;
+  const maxDays=Number(document.getElementById('maxDays').value)||null;
+  const verified=document.getElementById('verified').checked;
+  const sort=document.getElementById('sort').value;
+  let rows=products.map(p=>({...p,_match:scoreProduct(p,intent)}));
+  const hasQuery=normalize(q).length>1;
+  rows=rows.filter(p=>(!cat||p.category===cat)&&(!maxPrice||p.retail<=maxPrice)&&(!maxDays||p.days<=maxDays)&&(!verified||p.verified)&&(hasQuery?p._match.score>1:true));
+  if(sort==='price')rows.sort((a,b)=>a.retail-b.retail);
+  else if(sort==='delivery')rows.sort((a,b)=>a.days-b.days);
+  else if(sort==='score')rows.sort((a,b)=>b.score-a.score);
+  else rows.sort((a,b)=>b._match.score-a._match.score);
+  document.getElementById('count').textContent=rows.length+' sonuç';
+  document.getElementById('summaryTitle').textContent=hasQuery?'“'+q+'” için arama sonuçları':'Tüm ürünler';
+  document.getElementById('summarySub').textContent=hasQuery?'Ürün adı, özellikler, supplier, bütçe, MOQ ve teslimat kısıtları birlikte skorlandı.':'Katalog içindeki ürün ve tedarikçi kayıtları relevance skoruna göre sıralanır.';
+  const chips=[];
+  if(intent.maxPrice)chips.push('Bütçe ≤ €'+intent.maxPrice);
+  if(intent.maxDays)chips.push('Teslimat ≤ '+intent.maxDays+' gün');
+  if(intent.qty)chips.push('Adet '+intent.qty);
+  if(intent.country)chips.push('Pazar '+intent.country);
+  intent.tokens.slice(0,6).forEach(t=>chips.push(t));
+  document.getElementById('intent').innerHTML=chips.map(x=>'<span class="tag">'+x+'</span>').join('');
+  const el=document.getElementById('results');
+  if(!rows.length){el.innerHTML='<div class="empty card">Bu kriterlerle eşleşen ürün bulunamadı. Bütçe veya teslimat filtresini genişletmeyi deneyin.</div>';return;}
+  el.innerHTML=rows.map(p=>{
+    const rel=Math.max(0,Math.min(100,Math.round(48+p._match.score*2.4)));
+    return '<article class="result card"><div><div style="display:flex;justify-content:space-between;gap:10px"><div><h3>'+p.name+'</h3><div class="supplier">'+p.supplier+' • '+p.city+', China</div></div><span class="tag '+(p.risk==='LOW'?'green':'amber')+'">'+(p.verified?'VERIFIED • ':'')+p.risk+'</span></div><p class="desc">'+p.desc+'</p><div class="tags">'+p.tags.slice(0,7).map(t=>'<span class="ptag">'+t+'</span>').join('')+'</div><div style="margin-top:12px;font-size:10px;color:#7e91a8">Search relevance '+rel+'%</div><div class="scorebar"><i style="width:'+rel+'%"></i></div></div><div><div class="facts"><div class="fact"><span>Target retail</span><b>€'+p.retail.toFixed(2)+'</b></div><div class="fact"><span>Landed est.</span><b>€'+p.landed.toFixed(2)+'</b></div><div class="fact"><span>Supplier price</span><b>€'+p.unit.toFixed(2)+'</b></div><div class="fact"><span>MOQ</span><b>'+p.moq+'</b></div><div class="fact"><span>Delivery</span><b>'+p.days+' gün</b></div><div class="fact"><span>Supplier score</span><b>'+p.score+'/100</b></div></div><div class="actions"><button class="secondary" onclick="saveSearch(\''+p.id+'\')">Kaydet</button><button class="primary" onclick="inspect(\''+p.id+'\')">Teklifi incele</button></div></div></article>'
+  }).join('');
+}
+function inspect(id){
+  const p=products.find(x=>x.id===id); if(!p)return;
+  document.getElementById('mTitle').textContent=p.name;
+  document.getElementById('mDesc').textContent=p.desc;
+  const margin=((p.retail-p.landed)/p.retail*100).toFixed(1);
+  const fields=[['Supplier',p.supplier],['Location',p.city+', China'],['Unit price','€'+p.unit.toFixed(2)],['Landed cost','€'+p.landed.toFixed(2)],['Target retail','€'+p.retail.toFixed(2)],['Gross margin est.',margin+'%'],['MOQ',p.moq],['Delivery',p.days+' gün'],['Supplier score',p.score+'/100'],['Compliance',p.compliance.join(', ')]];
+  document.getElementById('mGrid').innerHTML=fields.map(x=>'<div class="detail"><span>'+x[0]+'</span><b>'+x[1]+'</b></div>').join('');
+  document.getElementById('mWhy').innerHTML=p.tags.map(t=>'<span class="ptag">'+t+'</span>').join('');
+  document.getElementById('rfq').textContent=JSON.stringify({product_id:p.id,product:p.name,supplier:p.supplier,quantity:Math.max(p.moq,100),destination:'EU',request:['unit_price','MOQ','sample_price','production_lead_time','DDP_shipping','payment_terms','compliance_documents'],binding:false,status:'DRAFT_ONLY'},null,2);
+  document.getElementById('modal').classList.add('open');
+}
+function saveSearch(id){const p=products.find(x=>x.id===id);alert((p?p.name:'Ürün')+' demo favorilerine kaydedildi.')}
+document.getElementById('close').onclick=()=>document.getElementById('modal').classList.remove('open');
+document.getElementById('modal').onclick=e=>{if(e.target.id==='modal')e.currentTarget.classList.remove('open')};
+document.getElementById('searchBtn').onclick=search;
+document.getElementById('q').addEventListener('keydown',e=>{if(e.key==='Enter')search()});
+document.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{document.getElementById('q').value=b.textContent;search()});
+['category','maxPrice','maxDays','sort','verified'].forEach(id=>document.getElementById(id).addEventListener('change',()=>render()));
+const cats=[...new Set(products.map(p=>p.category))].sort();document.getElementById('category').innerHTML+='<option>'+cats.join('</option><option>')+'</option>';
+document.getElementById('q').value='50 € altında minimalist masa lambası Almanya 10 gün';
+search();
 </script>
 </body>
 </html>

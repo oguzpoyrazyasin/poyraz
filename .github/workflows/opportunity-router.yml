@@ -1,0 +1,56 @@
+name: Opportunity Router Agent
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 * * * *"
+  push:
+    branches:
+      - master
+    paths:
+      - "opportunity-router-agent/**"
+      - ".github/workflows/opportunity-router.yml"
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: opportunity-router-agent
+  cancel-in-progress: true
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate agent
+        working-directory: opportunity-router-agent
+        run: |
+          python -m py_compile agent.py
+          python test_agent.py
+
+      - name: Run opportunity discovery
+        working-directory: opportunity-router-agent
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          MAX_RESULTS: "25"
+          PUBLISH_ISSUE: "true"
+        run: python agent.py
+
+      - name: Upload ranked report
+        uses: actions/upload-artifact@v4
+        with:
+          name: opportunity-router-report
+          path: opportunity-router-agent/output/
+          if-no-files-found: error
+          retention-days: 14

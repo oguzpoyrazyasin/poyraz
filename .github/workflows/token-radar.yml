@@ -1,0 +1,47 @@
+name: Token Radar Agent
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "41 * * * *"
+  push:
+    branches: [master]
+    paths:
+      - "token-radar-agent/**"
+      - ".github/workflows/token-radar.yml"
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: token-radar-agent
+  cancel-in-progress: true
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate scanner
+        working-directory: token-radar-agent
+        run: |
+          python -m py_compile scanner.py
+          python test_scanner.py
+      - name: Scan token universe
+        working-directory: token-radar-agent
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          PUBLISH_ISSUE: "true"
+        run: python scanner.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: token-radar-report
+          path: token-radar-agent/output/
+          if-no-files-found: error
+          retention-days: 14

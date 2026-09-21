@@ -21,17 +21,21 @@ concurrency:
 jobs:
   scan:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Validate scanner
+
+      - name: Validate agents
         working-directory: token-radar-agent
         run: |
-          python -m py_compile scanner.py
+          python -m py_compile scanner.py wallet_rewards.py
           python test_scanner.py
+          python test_wallet_rewards.py
+
       - name: Scan token universe
         working-directory: token-radar-agent
         env:
@@ -39,6 +43,23 @@ jobs:
           GITHUB_REPOSITORY: ${{ github.repository }}
           PUBLISH_ISSUE: "true"
         run: python scanner.py
+
+      - name: Check self-owned wallet rewards
+        working-directory: token-radar-agent
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          PUBLISH_WALLET_ISSUE: "true"
+          SELF_OWNED_WALLETS_JSON: ${{ secrets.SELF_OWNED_WALLETS_JSON }}
+          ETH_RPC_URL: ${{ secrets.ETH_RPC_URL }}
+          BASE_RPC_URL: ${{ secrets.BASE_RPC_URL }}
+          ARBITRUM_RPC_URL: ${{ secrets.ARBITRUM_RPC_URL }}
+          OPTIMISM_RPC_URL: ${{ secrets.OPTIMISM_RPC_URL }}
+          POLYGON_RPC_URL: ${{ secrets.POLYGON_RPC_URL }}
+          BSC_RPC_URL: ${{ secrets.BSC_RPC_URL }}
+          AVALANCHE_RPC_URL: ${{ secrets.AVALANCHE_RPC_URL }}
+        run: python wallet_rewards.py
+
       - uses: actions/upload-artifact@v4
         with:
           name: token-radar-report

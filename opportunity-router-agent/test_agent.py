@@ -1,5 +1,10 @@
 import agent
-from planner import prepare_plan
+from solution_preparer import (
+    _acceptance_items,
+    _classify,
+    _estimate_hours,
+    _success_probability,
+)
 from verifier import verify_record
 
 sample = {
@@ -28,29 +33,12 @@ verified = verify_record(
         "body": "Paid on merge",
         "assignees": [],
         "locked": False,
-        "comments": 1,
     },
     {"archived": False},
     [],
 )
 assert verified.status == "VERIFIED"
 assert verified.score >= 65
-
-saturated = verify_record(
-    {
-        "state": "open",
-        "author_association": "MEMBER",
-        "title": "[BOUNTY $200] Build workflow",
-        "body": "Paid on merge",
-        "assignees": [],
-        "locked": False,
-        "comments": 500,
-    },
-    {"archived": False},
-    [],
-)
-assert saturated.score < verified.score
-assert saturated.status != "VERIFIED"
 
 review = verify_record(
     {
@@ -60,26 +48,17 @@ review = verify_record(
         "body": "Proposed $50 reward paid on merge",
         "assignees": [],
         "locked": False,
-        "comments": 0,
     },
     {"archived": False},
     [],
 )
 assert review.status == "REVIEW"
 
-plan = prepare_plan(
-    {
-        "title": "[BOUNTY $300] Python API task",
-        "body": "- [ ] Add endpoint\n- [ ] Add tests\nPaid on merge",
-        "comments": 2,
-        "assignees": [],
-    },
-    verification_score=80,
-    reward_estimate=300.0,
-)
-assert plan.expected_hours > 0
-assert plan.risk_adjusted_value is not None
-assert plan.risk_adjusted_per_hour is not None
-assert plan.action.startswith("PREPARE")
+assert _classify("Create n8n workflow with cron") == "automation"
+criteria = _acceptance_items("- [ ] one\n- [x] two\nplain")
+assert criteria == ["one", "two"]
+hours = _estimate_hours("automation", "- [ ] one\n- [ ] two", 2)
+assert hours[0] > 0 and hours[1] > hours[0]
+assert _success_probability(80, 2, 200) > _success_probability(80, 200, 200)
 
 print("Opportunity Router v0.3 tests passed")

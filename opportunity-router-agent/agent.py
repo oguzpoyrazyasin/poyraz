@@ -14,6 +14,7 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import urlencode, urlparse
 from urllib.request import Request, urlopen
 
+from planner import prepare_plan
 from verifier import verify_record
 
 API = "https://api.github.com"
@@ -48,7 +49,7 @@ def github_request(method: str, path: str, token: str | None, payload: dict[str,
     headers = {
         "Accept": "application/vnd.github+json",
         "X-GitHub-Api-Version": "2022-11-28",
-        "User-Agent": "opportunity-router-agent/0.2",
+        "User-Agent": "opportunity-router-agent/0.3",
     }
     if token:
         headers["Authorization"] = f"Bearer {token}"
@@ -127,6 +128,7 @@ class Opportunity:
     final_score: float
     rationale: list[str]
     risks: list[str]
+    solution_plan: dict[str, Any] | None
 
 
 def score_issue(item: dict[str, Any]) -> Opportunity | None:
@@ -198,6 +200,7 @@ def score_issue(item: dict[str, Any]) -> Opportunity | None:
         final_score=round(discovery_score * 0.45, 1),
         rationale=rationale,
         risks=[],
+        solution_plan=None,
     )
 
 
@@ -229,6 +232,12 @@ def verify_opportunity(op: Opportunity, token: str | None) -> Opportunity:
             min(100.0, op.discovery_score * 0.45 + verification.score * 0.55),
             1,
         )
+        if verification.status == "VERIFIED":
+            op.solution_plan = prepare_plan(
+                issue=issue,
+                verification_score=verification.score,
+                reward_estimate=op.reward_estimate,
+            ).to_dict()
     except Exception as exc:
         op.verification_status = "REVIEW"
         op.risks.append(f"verification API error: {exc}")
@@ -262,16 +271,17 @@ def discover(token: str | None, max_results: int, max_verify: int) -> list[Oppor
         verify_opportunity(op, token)
         time.sleep(0.15)
 
-    verified = [op for op in opportunities if op.verification_status != "REJECT"]
-    verified.sort(
+    queue = [op for op in opportunities if op.verification_status != "REJECT"]
+    queue.sort(
         key=lambda x: (
             x.verification_status == "VERIFIED",
+            (x.solution_plan or {}).get("risk_adjusted_per_hour") or -1,
             x.final_score,
             x.reward_estimate or 0,
         ),
         reverse=True,
     )
-    return verified[:max_results]
+    return queue[:max_results]
 
 
 def render_markdown(opportunities: list[Opportunity]) -> str:
@@ -279,57 +289,98 @@ def render_markdown(opportunities: list[Opportunity]) -> str:
     lines = [
         f"# Opportunity Router — {stamp}",
         "",
-        "v0.2 adds a Verification Agent. Results are discovery signals, not guaranteed payouts. No work is automatically accepted or submitted.",
+        "v0.3 adds Solution Preparation for VERIFIED opportunities. No task is automatically claimed or submitted.",
         "",
         "## Ranked opportunities",
         "",
-        "| Final | Verify | Reward signal | Opportunity | Key risk |",
-        "|---:|---|---:|---|---|",
+        "| Final | Verify | Reward | Risk-adjusted $/h | Action | Opportunity | Key risk |",
+        "|---:|---|---:|---:|---|---|---|",
     ]
     if not opportunities:
-        lines.append("| — | — | — | No eligible opportunities found in this run | — |")
+        lines.append("| — | — | — | — | — | No eligible opportunities found in this run | — |")
     for op in opportunities:
         reward = f"{op.reward_estimate:,.0f}" if op.reward_estimate else "not explicit"
         risk = "; ".join(op.risks[:2]) if op.risks else "no immediate verification flag"
         safe_title = op.title.replace("|", "\\|")
+        plan = op.solution_plan or {}
+        evh = plan.get("risk_adjusted_per_hour")
+        evh_text = f"{evh:,.2f}" if isinstance(evh, (int, float)) else "—"
+        action = str(plan.get("action") or "VERIFY_FIRST")
         lines.append(
             f"| {op.final_score:.1f} | {op.verification_status} ({op.verification_score}) | "
-            f"{reward} | [{safe_title}]({op.url}) | {risk} |"
+            f"{reward} | {evh_text} | {action} | [{safe_title}]({op.url}) | {risk} |"
         )
 
-    verified_count = sum(1 for op in opportunities if op.verification_status == "VERIFIED")
+    verified = [op for op in opportunities if op.verification_status == "VERIFIED"]
     review_count = sum(1 for op in opportunities if op.verification_status == "REVIEW")
     lines += [
         "",
-        f"**Queue:** {verified_count} VERIFIED · {review_count} REVIEW",
+        f"**Queue:** {len(verified)} VERIFIED · {review_count} REVIEW",
         "",
+        "## Solution Preparation queue",
+        "",
+    ]
+    if not verified:
+        lines.append("No VERIFIED opportunities currently qualify for solution preparation.")
+    for op in verified:
+        plan = op.solution_plan or {}
+        lines += [
+            f"### {op.title}",
+            "",
+            f"- Expected effort: {plan.get('estimated_hours_low')}–{plan.get('estimated_hours_high')} h",
+            f"- Estimated success probability: {int((plan.get('success_probability') or 0) * 100)}%",
+            f"- Risk-adjusted value/hour: {plan.get('risk_adjusted_per_hour')}",
+            f"- Action: **{plan.get('action')}**",
+            f"- Domains: {', '.join(plan.get('detected_domains') or [])}",
+            "- Implementation:",
+        ]
+        for step in (plan.get("implementation_steps") or [])[:6]:
+            lines.append(f"  - {step}")
+        lines.append("- Test strategy:")
+        for step in (plan.get("test_strategy") or [])[:5]:
+            lines.append(f"  - {step}")
+        lines.append("")
+
+    lines += [
         "## Approval policy",
         "",
-        "- VERIFIED means the public GitHub signals passed the automated trust threshold; it does not guarantee payment.",
-        "- REVIEW requires a human check before any work starts.",
-        "- REJECT items are removed from the published queue.",
-        "- Before acting: confirm current bounty terms, eligibility, payout method, tax/KYC requirements, scope and claim status.",
-        "- The agent does not accept terms, submit PRs, create payout accounts, perform KYC, move funds, or run vulnerability/exploit automation.",
+        "- VERIFIED means automated public signals passed the threshold; it is not a payment guarantee.",
+        "- Solution Preparation creates only a technical/economic plan.",
+        "- Claiming, posting comments, submitting PRs, accepting terms, KYC and money movement remain human-approved actions.",
+        "- Security/vulnerability/exploit work remains excluded.",
     ]
     return "\n".join(lines) + "\n"
 
 
-def write_reports(opportunities: list[Opportunity]) -> tuple[Path, Path]:
+def write_reports(opportunities: list[Opportunity]) -> tuple[Path, Path, Path]:
     out = Path(__file__).resolve().parent / "output"
     out.mkdir(parents=True, exist_ok=True)
     json_path = out / "latest.json"
     md_path = out / "LATEST.md"
+    plans_path = out / "solution_queue.json"
     payload = {
         "generated_at": now_utc().isoformat(),
-        "version": "0.2",
+        "version": "0.3",
         "count": len(opportunities),
         "verified": sum(1 for x in opportunities if x.verification_status == "VERIFIED"),
         "review": sum(1 for x in opportunities if x.verification_status == "REVIEW"),
         "opportunities": [asdict(x) for x in opportunities],
     }
+    solution_queue = [
+        {
+            "title": x.title,
+            "url": x.url,
+            "reward_estimate": x.reward_estimate,
+            "verification_score": x.verification_score,
+            "solution_plan": x.solution_plan,
+        }
+        for x in opportunities
+        if x.verification_status == "VERIFIED" and x.solution_plan
+    ]
     json_path.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
     md_path.write_text(render_markdown(opportunities), encoding="utf-8")
-    return json_path, md_path
+    plans_path.write_text(json.dumps(solution_queue, indent=2, ensure_ascii=False), encoding="utf-8")
+    return json_path, md_path, plans_path
 
 
 def publish_issue(token: str, repo: str, body: str) -> None:
@@ -351,8 +402,8 @@ def main() -> int:
     max_verify = int(os.getenv("MAX_VERIFY", "20"))
     try:
         opportunities = discover(token, max_results, max_verify)
-        json_path, md_path = write_reports(opportunities)
-        print(f"Wrote {json_path} and {md_path}; {len(opportunities)} opportunities")
+        json_path, md_path, plans_path = write_reports(opportunities)
+        print(f"Wrote {json_path}, {md_path} and {plans_path}; {len(opportunities)} opportunities")
         if token and repo and os.getenv("PUBLISH_ISSUE", "true").lower() == "true":
             publish_issue(token, repo, md_path.read_text(encoding="utf-8"))
         return 0

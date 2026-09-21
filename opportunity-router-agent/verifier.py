@@ -113,6 +113,23 @@ def verify_record(
         score -= 8
         risks.append("issue conversation is locked")
 
+    total_comments = int(issue.get("comments") or 0)
+    if total_comments >= 200:
+        score -= 35
+        risks.append(f"extreme competition signal ({total_comments} comments)")
+    elif total_comments >= 100:
+        score -= 30
+        risks.append(f"very high competition signal ({total_comments} comments)")
+    elif total_comments >= 50:
+        score -= 22
+        risks.append(f"high competition signal ({total_comments} comments)")
+    elif total_comments >= 20:
+        score -= 14
+        risks.append(f"elevated competition signal ({total_comments} comments)")
+    elif total_comments >= 10:
+        score -= 7
+        risks.append(f"moderate competition signal ({total_comments} comments)")
+
     claim_text = "\n".join(str(c.get("body") or "") for c in comments)
     claim_signal = any(re.search(pattern, claim_text, re.IGNORECASE) for pattern in CLAIM_PATTERNS)
     if claim_signal:

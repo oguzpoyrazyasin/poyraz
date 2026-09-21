@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>DemandForge — Autonomous Commerce OS</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#08111c;color:#edf4fa}.shell{display:grid;grid-template-columns:240px 1fr;min-height:100vh}.side{background:#0d1724;border-right:1px solid #1f2c3e;padding:26px 18px;position:sticky;top:0;height:100vh}.brand{font-size:24px;font-weight:800;letter-spacing:-1px}.brand span{color:#7de2b8}.sub{font-size:12px;color:#7f8ea4;margin-top:6px;line-height:1.45}nav{display:grid;gap:8px;margin-top:32px}nav a{padding:10px 12px;color:#91a2b7;border-radius:10px;font-size:13px}nav a.active{background:#172537;color:#fff}.safe{position:absolute;bottom:18px;left:18px;right:18px;border:1px solid #26364b;border-radius:10px;padding:10px;color:#8090a7;font-size:10px;line-height:1.45}main{padding:34px;max-width:1400px;width:100%;margin:auto}.eyebrow{font-size:11px;font-weight:800;letter-spacing:1.4px;color:#71d8b0}h1{font-size:40px;letter-spacing:-1.6px;margin:8px 0 5px}.muted{color:#8394aa}.card{background:#101c2a;border:1px solid #24334a;border-radius:16px;box-shadow:0 18px 50px rgba(0,0,0,.2)}.composer{padding:16px;margin-top:24px}.composer textarea{width:100%;min-height:105px;background:transparent;border:0;outline:0;resize:vertical;color:#fff;font:inherit;font-size:17px;line-height:1.55}.row{display:flex;justify-content:space-between;align-items:center;gap:12px}.composer .row{border-top:1px solid #243146;padding-top:12px}button{border:0;border-radius:10px;background:#7de2b8;color:#07130f;padding:11px 15px;font-weight:800;cursor:pointer}.metrics{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin:18px 0}.metric{padding:14px}.metric span{display:block;color:#7f90a8;font-size:11px}.metric b{display:block;font-size:23px;margin-top:7px}.grid2{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}.panel{padding:18px}.tag{font-size:10px;padding:5px 8px;border-radius:999px;border:1px solid #38506a;color:#9ec8e9}.green{color:#7de2b8;border-color:#285d4b;background:#10261f}.amber{color:#ffd486;border-color:#6d5327;background:#2a2111}pre{background:#09131f;border-radius:12px;padding:14px;overflow:auto;color:#a9c8e6;font-size:12px}.slider{display:grid;gap:8px;margin:20px 0;font-size:12px;color:#c8d4df}.slider input{accent-color:#7de2b8}.options{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:13px}.opt{padding:18px}.opt.balanced{outline:1px solid #4a9b7d}.price{font-size:30px;font-weight:850;margin:14px 0}.lines{display:grid;gap:8px}.lines div{display:flex;justify-content:space-between;font-size:12px;border-bottom:1px solid #213047;padding-bottom:8px}.lines span{color:#8293a9}.factory{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #233047;padding:12px 0}.factory small{display:block;color:#77889f;margin-top:4px}.agents{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px}.agent{background:#0b1521;border:1px solid #1f2d40;border-radius:10px;padding:10px}.agent b,.agent span{display:block;font-size:11px}.agent span{color:#72849b;margin-top:4px}.section{margin-top:24px}.footer{margin:26px 0 8px;color:#667991;font-size:11px}@media(max-width:980px){.shell{grid-template-columns:1fr}.side{display:none}.metrics{grid-template-columns:repeat(3,1fr)}.grid2,.options{grid-template-columns:1fr}}@media(max-width:600px){main{padding:18px}.metrics{grid-template-columns:repeat(2,1fr)}h1{font-size:31px}.composer .row{align-items:flex-start;flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="shell">
+<aside class="side">
+  <div class="brand">DemandForge<span>AI</span></div>
+  <div class="sub">Autonomous Demand-to-Factory Commerce OS</div>
+  <nav>
+    <a class="active">Commerce Studio</a><a>Supplier Intelligence</a><a>RFQ Control</a><a>Orders</a><a>Policy & Approvals</a><a>Agent Control</a><a>Audit</a>
+  </nav>
+  <div class="safe">GITHUB PAGES DEMO<br><b>No real purchase, payment, advertising spend or supplier commitment.</b></div>
+</aside>
+<main>
+  <div class="row">
+    <div><div class="eyebrow">INTENT → SPEC → FACTORY → QUOTE → COMMERCE</div><h1>What are you trying to create?</h1><div class="muted">Describe the outcome. DemandForge converts it into a Product Genome and commercial scenarios.</div></div>
+    <span class="tag green">LIVE DEMO</span>
+  </div>
+  <section class="composer card">
+    <textarea id="q">I want a minimalist personalized rechargeable table lamp under €50, 50 pcs, delivered to Germany within 10 days.</textarea>
+    <div class="row"><span class="muted" style="font-size:12px">market • budget • SLA • quantity • customization</span><button id="go">Compile Product Genome</button></div>
+  </section>
+
+  <section class="metrics">
+    <div class="metric card"><span>Active sourcing</span><b>4</b></div><div class="metric card"><span>Supplier response</span><b>78%</b></div><div class="metric card"><span>RFQ→Offer</span><b>5.6h</b></div><div class="metric card"><span>Expected CM</span><b>34%</b></div><div class="metric card"><span>Orders at risk</span><b>1</b></div><div class="metric card"><span>Approvals</span><b>2</b></div>
+  </section>
+
+  <section class="grid2">
+    <div class="card panel"><div class="row"><h2>Product Genome</h2><span class="tag">source of truth</span></div><pre id="genome"></pre></div>
+    <div class="card panel"><div class="row"><h2>Optimization controls</h2><span class="tag">live constraints</span></div>
+      <label class="slider">Price ↔ Quality<input type="range" value="48"></label>
+      <label class="slider">Delivery ↔ Cost<input type="range" value="62"></label>
+      <label class="slider">Custom ↔ Standard<input type="range" value="72"></label>
+      <label class="slider">Low MOQ ↔ Scale<input type="range" value="35"></label>
+      <div class="muted" style="font-size:11px">Demo calculations run locally in the browser. Production mode will use live supplier, logistics and compliance connectors.</div>
+    </div>
+  </section>
+
+  <section class="section"><div class="row"><h2>Pareto commercial options</h2><span class="muted" style="font-size:12px">Trade-offs stay explicit.</span></div><div class="options" id="opts"></div></section>
+
+  <section class="grid2 section">
+    <div class="card panel"><div class="row"><h2>Factory Intelligence</h2><span class="tag">3 candidates</span></div><div id="factories"></div></div>
+    <div class="card panel"><div class="row"><h2>Agent Control Plane</h2><span class="tag">16 agents</span></div><div class="agents" id="agents"></div></div>
+  </section>
+  <div class="footer">DemandForge MVP • Static GitHub Pages demo • High-impact commercial actions remain approval-gated.</div>
+</main>
+</div>
+<script>
+const suppliers=[
+ {name:'Shenzhen LumenWorks',loc:'Shenzhen, China',moq:50,score:94,risk:'LOW RISK'},
+ {name:'Dongguan Nova Lighting',loc:'Dongguan, China',moq:100,score:91,risk:'LOW RISK'},
+ {name:'Guangzhou Vela Home',loc:'Guangzhou, China',moq:30,score:69,risk:'REVIEW'}
+];
+const agents=[['Intent Agent','A4'],['Product Architect','A3'],['Discovery Agent','A4'],['Factory Agent','A3'],['RFQ Agent','A3'],['Quote Parser','A4'],['Negotiation Agent','A2'],['Compliance Agent','A2'],['Logistics Agent','A3'],['Pricing Agent','A4'],['Creative Agent','A3'],['Order Agent','A1'],['QC Agent','A2'],['Support Agent','A3'],['Risk Agent','A4'],['Optimization Agent','A3']];
+function money(n){return new Intl.NumberFormat('en-DE',{style:'currency',currency:'EUR'}).format(n)}
+function compile(){
+ const t=document.getElementById('q').value, l=t.toLowerCase();
+ const price=Number((t.match(/(?:€|eur\s?)(\d+)/i)||[])[1]||50);
+ const qty=Number((t.match(/(\d+)\s*(?:pcs|adet)/i)||[])[1]||50);
+ const days=Number((t.match(/(\d+)\s*(?:day|gün)/i)||[])[1]||10);
+ const g={category:(l.includes('lamp')||l.includes('lamba'))?'lighting.table_lamp':'custom_product',market:(l.includes('germany')||l.includes('almanya'))?'DE':'EU',targetRetailPrice:price,quantity:qty,maxMoq:100,targetGrossMargin:0.40,maxDeliveryDays:days,style:l.includes('minimal')?['minimalist']:['modern'],features:{rechargeable:/recharge|şarj|usb/i.test(t),personalized:/personal|kişisel|logo|isim/i.test(t)},complianceMarket:'EU'};
+ document.getElementById('genome').textContent=JSON.stringify(g,null,2);
+ const base=30.15;
+ const opts=[
+  {tier:'Budget',supplier:suppliers[2],landed:base-3.1,retail:price-5,lead:12,del:72,qual:74,status:'REVIEW'},
+  {tier:'Balanced',supplier:suppliers[0],landed:base,retail:price,lead:9,del:90,qual:92,status:'PASS'},
+  {tier:'Premium',supplier:suppliers[1],landed:base+5,retail:price+9,lead:7,del:95,qual:95,status:'PASS'}
+ ];
+ document.getElementById('opts').innerHTML=opts.map(o=>{const m=((o.retail-o.landed)/o.retail*100).toFixed(1);return '<article class="opt card '+o.tier.toLowerCase()+'"><div class="row"><h3>'+o.tier+'</h3><span class="tag '+(o.status==='PASS'?'green':'amber')+'">'+o.status+'</span></div><div class="price">'+money(o.retail)+'</div><div class="lines"><div><span>Landed cost</span><b>'+money(o.landed)+'</b></div><div><span>Expected margin</span><b>'+m+'%</b></div><div><span>Lead time</span><b>'+o.lead+' days</b></div><div><span>Supplier score</span><b>'+o.supplier.score+'/100</b></div><div><span>Delivery confidence</span><b>'+o.del+'%</b></div><div><span>Quality confidence</span><b>'+o.qual+'%</b></div></div><div class="muted" style="font-size:12px;margin-top:12px">'+o.supplier.name+'</div></article>'}).join('');
+}
+document.getElementById('factories').innerHTML=suppliers.map(s=>'<div class="factory"><div><b>'+s.name+'</b><small>'+s.loc+' • MOQ '+s.moq+'</small></div><div class="row"><b>'+s.score+'</b><span class="tag '+(s.risk==='LOW RISK'?'green':'amber')+'">'+s.risk+'</span></div></div>').join('');
+document.getElementById('agents').innerHTML=agents.slice(0,10).map(a=>'<div class="agent"><b>'+a[0]+'</b><span>'+a[1]+' • READY</span></div>').join('');
+document.getElementById('go').onclick=compile;compile();
+</script>
+</body>
+</html>

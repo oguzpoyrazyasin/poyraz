@@ -1,4 +1,5 @@
 import agent
+from planner import prepare_plan
 from verifier import verify_record
 
 sample = {
@@ -27,12 +28,29 @@ verified = verify_record(
         "body": "Paid on merge",
         "assignees": [],
         "locked": False,
+        "comments": 1,
     },
     {"archived": False},
     [],
 )
 assert verified.status == "VERIFIED"
 assert verified.score >= 65
+
+saturated = verify_record(
+    {
+        "state": "open",
+        "author_association": "MEMBER",
+        "title": "[BOUNTY $200] Build workflow",
+        "body": "Paid on merge",
+        "assignees": [],
+        "locked": False,
+        "comments": 500,
+    },
+    {"archived": False},
+    [],
+)
+assert saturated.score < verified.score
+assert saturated.status != "VERIFIED"
 
 review = verify_record(
     {
@@ -42,24 +60,26 @@ review = verify_record(
         "body": "Proposed $50 reward paid on merge",
         "assignees": [],
         "locked": False,
+        "comments": 0,
     },
     {"archived": False},
     [],
 )
 assert review.status == "REVIEW"
 
-claimed = verify_record(
+plan = prepare_plan(
     {
-        "state": "open",
-        "author_association": "MEMBER",
-        "title": "[BOUNTY $200] Build workflow",
-        "body": "Paid on merge",
-        "assignees": [{"login": "someone"}],
-        "locked": False,
+        "title": "[BOUNTY $300] Python API task",
+        "body": "- [ ] Add endpoint\n- [ ] Add tests\nPaid on merge",
+        "comments": 2,
+        "assignees": [],
     },
-    {"archived": False},
-    [{"body": "I am working on this"}],
+    verification_score=80,
+    reward_estimate=300.0,
 )
-assert claimed.score < verified.score
+assert plan.expected_hours > 0
+assert plan.risk_adjusted_value is not None
+assert plan.risk_adjusted_per_hour is not None
+assert plan.action.startswith("PREPARE")
 
-print("Opportunity Router v0.2 tests passed")
+print("Opportunity Router v0.3 tests passed")

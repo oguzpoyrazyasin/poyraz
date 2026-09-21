@@ -1,0 +1,18 @@
+[
+  {
+    "program_id": "example-disabled",
+    "name": "Example Official Reward Program",
+    "official_url": "https://example.org",
+    "kind": "allocation_json",
+    "chain": "ethereum",
+    "token_symbol": "TOKEN",
+    "token_price_usd": null,
+    "allocation_url": "https://example.org/allocations.json",
+    "gas_estimate_usd": 3.0,
+    "swap_fee_pct": 0.3,
+    "off_ramp_fee_pct": 1.0,
+    "risk_haircut_pct": 20.0,
+    "minimum_net_ev_usd": 10.0,
+    "enabled": false
+  }
+]

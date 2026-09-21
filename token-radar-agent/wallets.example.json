@@ -1,0 +1,9 @@
+[
+  {
+    "chain": "ethereum",
+    "address": "0x0000000000000000000000000000000000000000",
+    "owner_verified": false,
+    "rpc_env": "ETH_RPC_URL",
+    "label": "replace-via-SELF_OWNED_WALLETS_JSON-secret"
+  }
+]

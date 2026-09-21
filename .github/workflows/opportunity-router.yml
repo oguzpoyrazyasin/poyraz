@@ -20,7 +20,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  discover-verify-plan:
+  discover-verify-prepare:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -35,10 +35,10 @@ jobs:
       - name: Validate agents
         working-directory: opportunity-router-agent
         run: |
-          python -m py_compile agent.py verifier.py planner.py
+          python -m py_compile agent.py verifier.py solution_preparer.py
           python test_agent.py
 
-      - name: Discover, verify and prepare solutions
+      - name: Discover verify and prepare
         working-directory: opportunity-router-agent
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -48,7 +48,7 @@ jobs:
           PUBLISH_ISSUE: "true"
         run: python agent.py
 
-      - name: Upload ranked report and solution queue
+      - name: Upload ranked and prepared reports
         uses: actions/upload-artifact@v4
         with:
           name: opportunity-router-report
